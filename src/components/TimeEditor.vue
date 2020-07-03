@@ -1,5 +1,5 @@
 <template>
-	<b-input-group class="mb-2">
+	<b-input-group class="mb-4 time-editor">
 		<b-input-group-prepend class="col-4 p-0">
 			<span class="w-100"><b-form-input :value="timeValue.minutes" ref="minuteEditor" @input="updateTime" aria-label="Minutes" min="0" type="number"></b-form-input><small class="text-muted">Minutes</small></span>
 		</b-input-group-prepend>
@@ -37,8 +37,6 @@ export default {
 			}
 			
 			time += ( +this.$refs.milisecondEditor.$el.value ) ? `${+this.$refs.milisecondEditor.$el.value}`: '0';
-
-			console.log(time)
 
 			return time;
 		}

@@ -1,7 +1,7 @@
 <template>
 	<div id="app">
 		<b-container class="mb-5">
-			<b-jumbotron id="main-jumbo" header="Cloudinary Video Subtitles" :header-level="4" lead="Add subtitles to videos hosted on Cloudinary">
+			<b-jumbotron id="main-jumbo" header="Cloudinary Video Subtitles" :header-level="4" lead="Add subtitles to videos hosted on Cloudinary" class="mt-sm-5 mt-3">
 				<p>Click watch video to play your video!</p>
 				<video v-if="videoUrl" width="480" controls autoplay>
 					<source :src="videoUrl" type="video/mp4">
@@ -12,8 +12,8 @@
 			<b-form @submit.prevent="onSubmit" @reset.prevent="onReset" v-if="show" class="mb-2">
 				<b-form-group
 					horizontal
-					:label-cols="2"
-					:label-cols-sm="12"
+					:label-cols-lg="2"
+					:label-cols="12"
 					label="Cloudinary Cloud Name"
 				>
 					<b-form-input v-model.trim="cloudName"></b-form-input>
@@ -21,8 +21,8 @@
 
 				<b-form-group
 					horizontal
-					:label-cols="2"
-					:label-cols-sm="12"
+					:label-cols-lg="2"
+					:label-cols="12"
 					label="Video Public ID"
 				>
 					<b-form-input v-model.trim="publicId"></b-form-input>
@@ -30,35 +30,36 @@
 
 				<b-form-group
 					horizontal
-					:label-cols="2"
-					:label-cols-sm="12"
+					:label-cols-lg="2"
+					:label-cols="12"
 					label="Video Subtitles"
+					class="subtitles-list-group"
 				>
 					<b-list-group>
 						<b-list-group-item
 							class="flex-column align-items-start"
-							v-for="(subtitle, index) in subtitlesJson.subtitles"
+							v-for="(subtitle, index) in subtitles"
 							:subtitle="subtitle"
 							v-bind:key="index"
 							:index="index"
 						>
 							<b-form-group
 								horizontal
-								:label-cols="2"
-								:label-cols-sm="12"
+								:label-cols-lg="2"
+								:label-cols="12"
 								label="Text"
 							>
 								<b-form-input v-model.trim="subtitle.text"></b-form-input>
 							</b-form-group>
 							<div class="form-row mb-2">
-								<label class="col-2 col-sm-12">Start Timing</label>
-								<time-editor v-model="subtitle['start-timing']" class="col-4 col-sm-12"></time-editor>
+								<label class="col-12 col-lg-2 mb-4">Start Timing</label>
+								<time-editor v-model="subtitle['start-timing']" class="col-lg-4 col-12" style="margin-bottom: 2rem !important;"></time-editor>
 
-								<label class="col-2 col-sm-12">End Timing</label>
-								<time-editor v-model="subtitle['end-timing']" class="col-4 col-sm-12"></time-editor>
+								<label class="col-12 col-lg-2 mb-4">End Timing</label>
+								<time-editor v-model="subtitle['end-timing']" class="col-lg-4 col-12"></time-editor>
 							</div>
 
-							<b-button variant="danger" class="mb-2" v-if="subtitlesJson.subtitles.length > 1" @click.prevent="deleteSubtitle(index)">Delete</b-button>
+							<b-button variant="danger" class="mb-2 mt-4" v-if="subtitles.length > 1" @click.prevent="deleteSubtitle(index)">Delete</b-button>
 
 						</b-list-group-item>
 					</b-list-group>
@@ -84,29 +85,27 @@ export default {
 			show: true,
 			cloudName: '',
 			publicId: '',
-			subtitlesJson: {
-				subtitles: [
-					{
-						'text': '',
-						'start-timing': '0:00.0',
-						'end-timing': '0:00.0',
-					}
-				]
-			},
+			subtitles: [
+				{
+					'text': '',
+					'start-timing': '0:00.0',
+					'end-timing': '0:00.0',
+				}
+			],
 			videoUrl: '',
 			errorMessage: '',
 		}
 	},
 	methods: {
 		addSubtitle() {
-			this.subtitlesJson.subtitles.push({
+			this.subtitles.push({
 				'text': '',
 				'start-timing': '0:00.0',
 				'end-timing': '0:00.0',
 			})
 		},
 		deleteSubtitle(itemIndex) {
-			this.subtitlesJson.subtitles = this.subtitlesJson.subtitles.filter((item, index) => index != itemIndex );
+			this.subtitles = this.subtitles.filter((item, index) => index != itemIndex );
 		},
 		onSubmit() {
 			try {
@@ -118,7 +117,9 @@ export default {
 						autoHideDelay: 5000
 					})
 				}
-				let url = cldVideoSubtitles.addSubtitlesToVideo(this.publicId, this.subtitlesJson);
+				let url = cldVideoSubtitles.addSubtitlesToVideo(this.publicId, {
+					subtitles: this.subtitles.filter((subtitle) => subtitle.text != '') 
+				});
 
 				// The library assumes a default cloud_name of candidate-evaluation and this UI should replace it
 				this.$nextTick(() => this.videoUrl = url.replace('https://res.cloudinary.com/candidate-evaluation/', `https://res.cloudinary.com/${this.cloudName}/`) );
@@ -140,7 +141,7 @@ export default {
 			// Reset our form values
 			this.cloudName = '';
 			this.publicId = '';
-			this.subtitlesJson.subtitles = [{
+			this.subtitles = [{
 				'text': '',
 				'start-timing': '0:00.0',
 				'end-timing': '0:00.0',
@@ -169,7 +170,12 @@ export default {
 	-moz-osx-font-smoothing: grayscale;
 	text-align: center;
 	color: #2c3e50;
-	margin-top: 60px;
+}
+
+.form-group:not(.subtitles-list-group) .form-row,
+.form-group.subtitles-list-group .form-row .form-row {
+	align-items: center;
+	justify-content: center;
 }
 
 .list-group-item {
@@ -177,12 +183,25 @@ export default {
 		border-radius: 0;
 	}
 	
-	.input-group {
+	.time-editor.input-group {
 		width: auto;
+
+		.text-muted {
+			position: absolute;
+			left: auto;
+			right: 50%;
+			bottom: auto;
+			transform: translateX(50%);
+		}
 
 		.input-group-main {
 			width: 100%;
 		}
+		
 	}
+}
+
+#main-jumbo video {
+	max-width: -webkit-fill-available;
 }
 </style>
