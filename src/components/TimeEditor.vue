@@ -1,13 +1,13 @@
 <template>
 	<b-input-group class="mb-2">
 		<b-input-group-prepend class="col-4 p-0">
-			<span><b-form-input :value="timeValue.minutes" ref="minuteEditor" @input="updateTime" aria-label="Minutes" min="0" type="number"></b-form-input><small class="text-muted">Minutes</small></span>
+			<span class="w-100"><b-form-input :value="timeValue.minutes" ref="minuteEditor" @input="updateTime" aria-label="Minutes" min="0" type="number"></b-form-input><small class="text-muted">Minutes</small></span>
 		</b-input-group-prepend>
 
-		<span class="col-4 p-0"><b-form-input :value="timeValue.seconds" ref="secondEditor" @input="updateTime" aria-label="Seconds" min="0" max="60" type="number"></b-form-input><small class="text-muted">Seconds</small></span>
+		<span class="col-4 p-0 input-group-main"><b-form-input :value="timeValue.seconds" ref="secondEditor" @input="updateTime" aria-label="Seconds" min="0" max="60" type="number"></b-form-input><small class="text-muted">Seconds</small></span>
 		
 		<b-input-group-append class="col-4 p-0">
-			<span><b-form-input :value="timeValue.miliseconds" ref="milisecondEditor" @input="updateTime" aria-label="Miliseconds" min="0" type="number"></b-form-input><small class="text-muted">Miliseconds</small></span>
+			<span class="w-100"><b-form-input :value="timeValue.miliseconds" ref="milisecondEditor" @input="updateTime" aria-label="Miliseconds" min="0" type="number"></b-form-input><small class="text-muted">Miliseconds</small></span>
 		</b-input-group-append>
 	</b-input-group>
 </template>

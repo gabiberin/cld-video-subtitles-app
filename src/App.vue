@@ -1,7 +1,7 @@
 <template>
 	<div id="app">
 		<b-container class="mb-5">
-			<b-jumbotron id="main-jumbo" header="Cloudinary Video Subtitles" lead="Add subtitles to videos hosted on Cloudinary">
+			<b-jumbotron id="main-jumbo" header="Cloudinary Video Subtitles" :header-level="4" lead="Add subtitles to videos hosted on Cloudinary">
 				<p>Click watch video to play your video!</p>
 				<video v-if="videoUrl" width="480" controls autoplay>
 					<source :src="videoUrl" type="video/mp4">
@@ -13,6 +13,7 @@
 				<b-form-group
 					horizontal
 					:label-cols="2"
+					:label-cols-sm="12"
 					label="Cloudinary Cloud Name"
 				>
 					<b-form-input v-model.trim="cloudName"></b-form-input>
@@ -21,6 +22,7 @@
 				<b-form-group
 					horizontal
 					:label-cols="2"
+					:label-cols-sm="12"
 					label="Video Public ID"
 				>
 					<b-form-input v-model.trim="publicId"></b-form-input>
@@ -29,6 +31,7 @@
 				<b-form-group
 					horizontal
 					:label-cols="2"
+					:label-cols-sm="12"
 					label="Video Subtitles"
 				>
 					<b-list-group>
@@ -42,16 +45,17 @@
 							<b-form-group
 								horizontal
 								:label-cols="2"
+								:label-cols-sm="12"
 								label="Text"
 							>
 								<b-form-input v-model.trim="subtitle.text"></b-form-input>
 							</b-form-group>
 							<div class="form-row mb-2">
-								<label class="col-2">Start Timing</label>
-								<time-editor v-model="subtitle['start-timing']" class="col-4"></time-editor>
+								<label class="col-2 col-sm-12">Start Timing</label>
+								<time-editor v-model="subtitle['start-timing']" class="col-4 col-sm-12"></time-editor>
 
-								<label class="col-2">End Timing</label>
-								<time-editor v-model="subtitle['end-timing']" class="col-4"></time-editor>
+								<label class="col-2 col-sm-12">End Timing</label>
+								<time-editor v-model="subtitle['end-timing']" class="col-4 col-sm-12"></time-editor>
 							</div>
 
 							<b-button variant="danger" class="mb-2" v-if="subtitlesJson.subtitles.length > 1" @click.prevent="deleteSubtitle(index)">Delete</b-button>
@@ -175,6 +179,10 @@ export default {
 	
 	.input-group {
 		width: auto;
+
+		.input-group-main {
+			width: 100%;
+		}
 	}
 }
 </style>
